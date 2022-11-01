@@ -13,7 +13,7 @@ const passwordVerificator = require('../middleware/passwordVerificator');
 // -------------
 router.post('/signup', emailVerificator, passwordVerificator, userController.signupUser);
 
-router.post('/login');
+router.post('/login', userController.login);
 
 // ------------------------
 // Export des routes 'USER'
