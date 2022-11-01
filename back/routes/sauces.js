@@ -6,10 +6,12 @@ const router = express.Router();
 
 const auth = require('../middleware/auth');
 
+const sauceController = require('../controllers/sauce');
+
 // -------------
 // Routes 'SAUCE'
 // -------------
-router.get('/', auth);
+router.get('/', auth, sauceController.getAllSauces);
 
 router.get('/:id', auth);
 
