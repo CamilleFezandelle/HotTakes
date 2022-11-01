@@ -13,7 +13,7 @@ const sauceController = require('../controllers/sauce');
 // -------------
 router.get('/', auth, sauceController.getAllSauces);
 
-router.get('/:id', auth);
+router.get('/:id', auth, sauceController.getSauceById);
 
 router.post('/', auth);
 

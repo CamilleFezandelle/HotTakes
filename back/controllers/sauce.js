@@ -14,4 +14,12 @@ exports.getAllSauces = (req, res) => {
 		.catch((err) => res.status(500).json(err));
 };
 
+// RECUPERATION D'UNE SAUCE (ID)
+exports.getSauceById = (req, res) => {
+	const sauceId = req.params.id;
+	Sauce.findById(sauceId)
+		.then((sauce) => res.json(sauce))
+		.catch((err) => res.status(500).json(err));
+};
+
 // -------------------------------------
