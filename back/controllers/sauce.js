@@ -95,4 +95,31 @@ exports.updateSauce = (req, res) => {
 		.catch((err) => res.status(500).json(err));
 };
 
+// SUPPRESSION D'UNE SAUCE
+exports.deleteSauce = (req, res) => {
+	const sauceId = req.params.id;
+	Sauce.findById(sauceId)
+		.then((sauce) => {
+			// Test d'authenticité de l'utilisateur
+			if (req.auth.userId !== sauce.userId) {
+				return res.status(403).json({ message: 'Forbidden access.' });
+			}
+
+			// Suppression de l'image stockée
+			const imgFileName = sauce.imageUrl.split('/images/')[1];
+			fs.unlink(`images/${imgFileName}`, (errFile) => {
+				// On averti la console si la suppression a échoué
+				if (errFile) {
+					console.log(`/!\ La suppression de l'image a échoué >> ${errFile}`);
+				}
+
+				// Suppression de la sauce de la DB
+				Sauce.deleteOne({ _id: sauceId })
+					.then(() => res.status(200).json({ message: 'Sauce successfully removed.' }))
+					.catch((err) => res.status(400).json(err));
+			});
+		})
+		.catch((err) => res.status(500).json(err));
+};
+
 // -------------------------------------
