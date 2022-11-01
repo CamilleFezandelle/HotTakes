@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const usersRoutes = require('./routes/users');
+const saucesRoutes = require('./routes/sauces');
 
 // -----------------------
 // Initialisation de l'API
@@ -21,6 +22,7 @@ app.use(helmet({ crossOriginResourcePolicy: false }));
 // Routes de l'API
 // ---------------
 app.use('/api/auth/', usersRoutes);
+app.use('/api/sauces/', saucesRoutes);
 
 // ------------------
 // START SERVER + DB
