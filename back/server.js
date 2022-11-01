@@ -8,12 +8,19 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const usersRoutes = require('./routes/users');
+
 // -----------------------
 // Initialisation de l'API
 // -----------------------
 app.use(cors());
 app.use(express.json());
 app.use(helmet({ crossOriginResourcePolicy: false }));
+
+// ---------------
+// Routes de l'API
+// ---------------
+app.use('/api/auth/', usersRoutes);
 
 // ------------------
 // START SERVER + DB
