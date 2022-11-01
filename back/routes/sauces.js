@@ -18,7 +18,7 @@ router.get('/:id', auth, sauceController.getSauceById);
 
 router.post('/', auth, multer, sauceController.createSauce);
 
-router.put('/:id', auth, multer);
+router.put('/:id', auth, multer, sauceController.updateSauce);
 
 router.delete('/:id', auth);
 
