@@ -4,8 +4,8 @@ Construction d'une API sécurisée pour "Hot Takes" (application d'avis gastrono
 
 ### Pour lancer le front du projet
 
-Exécuter " ng serv "
+Exécuter " npm start " (si cela ne marche pas : " ng serv " ).
 
 ### Pour lancer le back du projet
 
-Exécuter " "
+Exécuter " npm start " (si cela ne marche pas : " nodemon -r dotenv/config server.js " ).
