@@ -122,4 +122,57 @@ exports.deleteSauce = (req, res) => {
 		.catch((err) => res.status(500).json(err));
 };
 
+// LIKE OU DISLIKE D'UNE SAUCE
+exports.likeOrDislikeSauce = (req, res) => {
+	const sauceId = req.params.id;
+	const userId = req.body.userId;
+	const likeDislike = req.body.like;
+
+	// Test d'authenticité de l'utilisateur
+	if (req.auth.userId !== userId) {
+		return res.status(403).json({ message: 'Forbidden access.' });
+	}
+
+	// Détection de la sauce liké ou disliké par l'utilisateur
+	Sauce.findById(sauceId)
+		.then((sauce) => {
+			// L'utilisateur a like la sauce
+			if (likeDislike === 1) {
+				Sauce.findByIdAndUpdate(sauceId, { $push: { usersLiked: userId }, $inc: { likes: +1 } })
+					.then(() => res.status(201).json({ message: 'Sauce: like successfully added.' }))
+					.catch((err) => res.status(400).json(err));
+			}
+
+			// L'utilisateur a dislike la sauce
+			if (likeDislike === -1) {
+				Sauce.findByIdAndUpdate(sauceId, { $push: { usersDisliked: userId }, $inc: { dislikes: +1 } })
+					.then(() => res.status(201).json({ message: 'Sauce: dislike successfully added.' }))
+					.catch((err) => res.status(400).json(err));
+			}
+
+			// L'utilisateur a annulé son like ou dislike
+			if (likeDislike === 0) {
+				// Annulation d'un like
+				if (sauce.usersLiked.includes(userId)) {
+					Sauce.findByIdAndUpdate(sauceId, { $pull: { usersLiked: userId }, $inc: { likes: -1 } })
+						.then(() => res.status(201).json({ message: 'Sauce: like successfully removed.' }))
+						.catch((err) => res.status(400).json(err));
+				}
+
+				// Annulation d'un dislike
+				else if (sauce.usersDisliked.includes(userId)) {
+					Sauce.findByIdAndUpdate(sauceId, { $pull: { usersDisliked: userId }, $inc: { dislikes: -1 } })
+						.then(() => res.status(201).json({ message: 'Sauce: dislike successfully removed.' }))
+						.catch((err) => res.status(400).json(err));
+				}
+
+				// Si les deux conditions ne sont pas remplies : erreur
+				else {
+					res.status(500).json({ message: 'Internal Server Error.' });
+				}
+			}
+		})
+		.catch((err) => res.status(500).json(err));
+};
+
 // -------------------------------------
